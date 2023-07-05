@@ -1,9 +1,10 @@
-from dataclasses import dataclass
-
+from dataclasses import dataclass, field
+from pydantic import BaseModel
+from typing import List
 
 @dataclass
 class AdventureModel:
     adventure_id: str
-    users: []
     intro_text: str
-    game_log: str
+    history: str
+    users: list = field(default_factory=list)

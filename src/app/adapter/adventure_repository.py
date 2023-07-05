@@ -1,6 +1,7 @@
 import json
 import uuid
 from couchbase.options import QueryOptions
+
 from interface.i_adventure_repository import IAdventureRepository
 from interface.i_couchbase_repository import ICouchbaseRepository
 from domain.adventure_model import AdventureModel
@@ -22,7 +23,7 @@ class AdventureRepsitory(IAdventureRepository):
                 row['adventures']['adventure_id'],
                 row['adventures']['users'],
                 row['adventures']['intro_text'], 
-                row['adventures']['game_log'])
+                row['adventures']['history'])
             adventures.append(result)
         return adventures
 
