@@ -1,5 +1,5 @@
 import uvicorn
-from config import BUILD_VERSION, METRICS_PATH, NAME, HOST, HTTPPORT
+from config import HOST, BUILD_VERSION, METRICS_PATH, NAME, HOST, HTTPPORT
 
 from flask import Flask, request
 from fastapi import FastAPI, Request, Depends, HTTPException
@@ -14,7 +14,7 @@ from adapter.adventure_repository import AdventureRepsitory
 from services.adventure_service import AdventureService
 
 
-PORT.info({"port": "8000"})
+PORT.info({"port": HTTPPORT})
 
 app = FastAPI()
 app.add_middleware(
