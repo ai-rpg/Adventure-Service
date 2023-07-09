@@ -37,7 +37,7 @@ class AdventureServiceUnitTest(unittest.TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), ['adventure1', 'adventure2'])
-        adventureService.get_all_adventures_for_user.assert_called_once_with('123')
+        AdventureService.get_all_adventures_for_user.assert_called_once_with('123')
 
 
 if __name__ == '__main__':
