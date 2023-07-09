@@ -27,5 +27,5 @@ class CouchbaseRepository:
             self.cluster.query(
                 "CREATE PRIMARY INDEX on {CB_BUCKET_NAME}._default.{CB_COLLECTION}"
             )
-        except QueryIndexAlreadyExistsException:
+        except QueryIndexAlreadyExistsException:  # noqa: F821
             log.warning("Index already exists")
