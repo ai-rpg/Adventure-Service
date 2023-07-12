@@ -34,3 +34,4 @@ passlib[bcrypt]
 python-multipart
 uvicorn
 httpx
+python-logging-loki
