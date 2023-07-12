@@ -7,13 +7,15 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from starlette_prometheus import metrics, PrometheusMiddleware
-from metrics import PORT
+from metrics import PORT, BASE_ROOT_CALLED, GET_USER_ADVENTURES_CALLED, NEW_ADVENTURE_CALLED
 
 from adapter.couchbase_repository import CouchbaseRepository
 from adapter.adventure_repository import AdventureRepsitory
 from services.adventure_service import AdventureService
+from logger import log
 
 
+log.info("Application Starting up", extra={"tags": {"application": NAME}})
 PORT.info({"port": HTTPPORT})
 
 app = FastAPI()
@@ -35,6 +37,8 @@ security = HTTPBearer()
 
 @app.get("/")
 def base_root():
+    log.debug("base route called", extra={"tags": {"application": NAME}})
+    BASE_ROOT_CALLED.inc()
     pass
 
 from domain.adventure_model import AdventureModel
@@ -43,13 +47,20 @@ from domain.adventure_model import AdventureModel
 #, credentials: HTTPAuthorizationCredentials = Depends(security)
 @app.post("/create")
 async def create_new_adventure(model: AdventureModel):
-    #model = AdventureModel("3163acd1-c119-4e9e-a52f-7d6d642ca021", ['c1b73974-999b-492c-8a13-1c21c2663f1f','d998eec4-57ce-4926-9d12-07044113866d'], 'intro_text', ['one','two', 'three'])
-    adventureService.create_new_adventure(model)
+    try:
+        NEW_ADVENTURE_CALLED.inc()
+        adventureService.create_new_adventure(model)
+    except Exception as inst: 
+        log.error("create_new_adventure",extra={"tags": {"application": NAME}}, exc_info=True)
 
 @app.get("/adventures/{user_id}")
 async def get_all_adventures_for_user(user_id):
-    return adventureService.get_all_adventures_for_user(user_id)
+    try:
+        GET_USER_ADVENTURES_CALLED.inc()
+        return await adventureService.get_all_adventures_for_user(user_id)
+    except Exception as inst: 
+        log.error("get_all_adventures_for_user",extra={"tags": {"application": NAME}}, exc_info=True)
 
 
 if __name__ == "__main__":
-    uvicorn.run("bootstrap:app", host=HOST, port=int(HTTPPORT), log_level="info")
+    uvicorn.run("bootstrap:app", host=HOST, port=int(HTTPPORT), log_level="debug")

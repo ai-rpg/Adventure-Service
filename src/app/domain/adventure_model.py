@@ -6,5 +6,5 @@ from typing import List
 class AdventureModel:
     adventure_id: str
     intro_text: str
-    history: str
+    history: list = field(default_factory=list)
     users: list = field(default_factory=list)

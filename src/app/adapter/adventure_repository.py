@@ -10,16 +10,16 @@ class AdventureRepsitory(IAdventureRepository):
     def __init__(self, i_couchbase_repo: ICouchbaseRepository):
         self.couchbase_repository = i_couchbase_repo
 
-    def get_all_adventures_for_user(self, user_id):
+    async def get_all_adventures_for_user(self, user_id):
         #select * from OpenAI._default.adventures where ARRAY_CONTAINS(users,'01026f99-896e-49be-94e1-6e8c2a05dd5e')
         scope = self.couchbase_repository.cb.scope("_default")
-        sql_query = "select * from OpenAI._default.adventures where ARRAY_CONTAINS(users, $1)"
+        sql_query = "select * from adventures where ARRAY_CONTAINS(users, $1)"
         row_iter = scope.query(
             sql_query, QueryOptions(positional_parameters=[user_id])
         )
         adventures = []
         for row in row_iter:
-            result:AdventureModel= AdventureModel(
+            result:AdventureModel = AdventureModel(
                 row['adventures']['adventure_id'],
                 row['adventures']['users'],
                 row['adventures']['intro_text'], 
@@ -27,7 +27,7 @@ class AdventureRepsitory(IAdventureRepository):
             adventures.append(result)
         return adventures
 
-    def create_new_adventure(self, user_id, adventure):
+    def create_new_adventure(self, adventure):
         try:
             self.couchbase_repository.cb_coll.upsert(
                 str(uuid.uuid4()), adventure.__dict__

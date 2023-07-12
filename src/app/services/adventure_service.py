@@ -8,7 +8,7 @@ class AdventureService(IAdventureService):
         self.adventure_repo = i_adventure_repository
 
     def create_new_adventure(self, adventure: AdventureModel):
-        return self.adventure_repo.create_new_adventure(1, adventure)
+        return self.adventure_repo.create_new_adventure(adventure)
 
     def get_all_adventures_for_user(self, user_id):
         return self.adventure_repo.get_all_adventures_for_user(user_id)
