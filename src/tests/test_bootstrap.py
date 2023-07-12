@@ -1,9 +1,13 @@
 import unittest
 from unittest.mock import MagicMock
 from fastapi.testclient import TestClient
+import sys
+# caution: path[0] is reserved for script path (or '' in REPL)
+sys.path.insert(1, '/workspace/ai-rpg/adventure-service/src/app')
 
-from app.bootstrap import app
-
+from bootstrap import app
+from services.adventure_service import AdventureService
+#import bootstrap
 
 class TestApp(unittest.TestCase):
     def setUp(self):
@@ -24,7 +28,7 @@ class TestApp(unittest.TestCase):
                 "d998eec4-57ce-4926-9d12-07044113866d"
             ],
             "intro_text": "intro_text",
-            "options": ["one", "two", "three"]
+            "history": ["one", "two", "three"]
         })
 
         self.assertEqual(response.status_code, 200)

@@ -1,3 +1,7 @@
+import sys
+# caution: path[0] is reserved for script path (or '' in REPL)
+sys.path.insert(1, '/workspace/ai-rpg/adventure-service/src/app')
+
 import unittest
 
 from domain.adventure_model import AdventureModel
