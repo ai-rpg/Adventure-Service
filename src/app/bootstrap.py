@@ -1,3 +1,4 @@
+import atexit 
 import uvicorn
 from config import HOST, BUILD_VERSION, METRICS_PATH, NAME, HOST, HTTPPORT
 
@@ -61,6 +62,10 @@ async def get_all_adventures_for_user(user_id):
     except Exception as inst: 
         log.error("get_all_adventures_for_user",extra={"tags": {"application": NAME}}, exc_info=True)
 
+@atexit.register 
+def goodbye(): 
+    log.info("Application Shuting down", extra={"tags": {"application": NAME}})
 
 if __name__ == "__main__":
     uvicorn.run("bootstrap:app", host=HOST, port=int(HTTPPORT), log_level="debug")
+
