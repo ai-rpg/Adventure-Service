@@ -2,8 +2,8 @@ from interface.i_adventure_service import IAdventureService
 from interface.i_adventure_repository import IAdventureRepository
 from domain.adventure_model import AdventureModel
 
-class AdventureService(IAdventureService):
 
+class AdventureService(IAdventureService):
     def __init__(self, i_adventure_repository: IAdventureRepository):
         self.adventure_repo = i_adventure_repository
 

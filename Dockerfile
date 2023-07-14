@@ -6,4 +6,4 @@ RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
 EXPOSE 9899
 WORKDIR app
-CMD ["python", "bootstrap.py"]
+CMD ["python", "main.py"]
