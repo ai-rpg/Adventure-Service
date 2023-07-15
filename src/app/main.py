@@ -103,8 +103,10 @@ async def get_all_adventures_for_user(user_id):
 def goodbye():
     adventureApp.goodbye()
 
+
 adventureApp = AdventureApp()
 
 if __name__ == "__main__":
+    log.info("Application Starting up", extra={"tags": {"application": NAME}})
 
     uvicorn.run("main:app", host=HOST, port=int(HTTPPORT), log_level="debug")
