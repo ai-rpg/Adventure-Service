@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from typing import List
 import json
 
+
 @dataclass
 class Conversation:
     role: str
@@ -10,6 +11,7 @@ class Conversation:
 
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True)
+
 
 @dataclass
 class AdventureModel:

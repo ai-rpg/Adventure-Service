@@ -11,7 +11,7 @@ from metrics import (
     BASE_ROOT_CALLED,
     GET_USER_ADVENTURES_CALLED,
     NEW_ADVENTURE_CALLED,
-    UPDATE_ADVENTURE_CALLED
+    UPDATE_ADVENTURE_CALLED,
 )
 from adapter.couchbase_repository import CouchbaseRepository
 from adapter.adventure_repository import AdventureRepository

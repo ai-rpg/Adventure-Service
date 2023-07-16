@@ -26,7 +26,7 @@ class AdventureRepository(IAdventureRepository):
                 result: AdventureModel = AdventureModel(
                     row["adventures"]["adventure_id"],
                     row["adventures"]["gamelog"],
-                    row["adventures"]["users"]
+                    row["adventures"]["users"],
                 )
                 adventures.append(result)
             return adventures
