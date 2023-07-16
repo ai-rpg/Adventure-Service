@@ -11,6 +11,7 @@ from metrics import (
     BASE_ROOT_CALLED,
     GET_USER_ADVENTURES_CALLED,
     NEW_ADVENTURE_CALLED,
+    UPDATE_ADVENTURE_CALLED
 )
 from adapter.couchbase_repository import CouchbaseRepository
 from adapter.adventure_repository import AdventureRepository
@@ -48,7 +49,7 @@ class AdventureApp:
     def create_new_adventure(self, model):
         try:
             NEW_ADVENTURE_CALLED.inc()
-            self.adventure_service.create_new_adventure(model)
+            return self.adventure_service.create_new_adventure(model)
         except Exception as inst:
             log.error(
                 "create_new_adventure",
@@ -65,6 +66,15 @@ class AdventureApp:
                 "get_all_adventures_for_user",
                 extra={"tags": {"application": NAME}},
                 exc_info=True,
+            )
+
+    async def update_adventure(self, model):
+        try:
+            UPDATE_ADVENTURE_CALLED.inc()
+            return self.adventure_service.update_adventure(model)
+        except Exception as inst:
+            log.error(
+                "update_adventure", extra={"tags": {"application": NAME}}, exc_info=True
             )
 
     def goodbye(self):
@@ -90,8 +100,8 @@ def base_root():
 
 
 @app.post("/create")
-def create_new_adventure(model: AdventureModel):
-    adventureApp.create_new_adventure(model)
+def create_new_adventure(user_id: str):
+    return adventureApp.create_new_adventure(user_id)
 
 
 @app.get("/adventures/{user_id}")
@@ -99,12 +109,18 @@ async def get_all_adventures_for_user(user_id):
     return await adventureApp.get_all_adventures_for_user(user_id)
 
 
+@app.post("/update")
+async def update_adventure(model: AdventureModel):
+    return await adventureApp.update_adventure(model)
+
+
+adventureApp = AdventureApp()
+
+
 @atexit.register
 def goodbye():
     adventureApp.goodbye()
 
-
-adventureApp = AdventureApp()
 
 if __name__ == "__main__":
     log.info("Application Starting up", extra={"tags": {"application": NAME}})

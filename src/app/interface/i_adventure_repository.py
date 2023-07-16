@@ -7,5 +7,9 @@ class IAdventureRepository(metaclass=abc.ABCMeta):
         raise NotImplementedError
 
     @abc.abstractclassmethod
-    def create_new_adventure(self, user_id, adventure):
+    def create_new_adventure(self, adventure):
+        raise NotImplementedError
+
+    @abc.abstractclassmethod
+    def update_adventure(self, adventure):
         raise NotImplementedError

@@ -25,9 +25,8 @@ class AdventureRepository(IAdventureRepository):
             for row in row_iter:
                 result: AdventureModel = AdventureModel(
                     row["adventures"]["adventure_id"],
-                    row["adventures"]["users"],
-                    row["adventures"]["intro_text"],
-                    row["adventures"]["history"],
+                    row["adventures"]["gamelog"],
+                    row["adventures"]["users"]
                 )
                 adventures.append(result)
             return adventures
@@ -41,11 +40,24 @@ class AdventureRepository(IAdventureRepository):
     def create_new_adventure(self, adventure):
         try:
             self.couchbase_repository.cb_coll.upsert(
-                str(uuid.uuid4()), adventure.__dict__
+                adventure.adventure_id, adventure.__dict__
             )
+            return adventure.adventure_id
         except Exception as inst:
             log.error(
                 "create_new_adventure",
+                extra={"tags": {"application": NAME}},
+                exc_info=True,
+            )
+
+    def update_adventure(self, adventure):
+        try:
+            self.couchbase_repository.cb_coll.upsert(
+                adventure.adventure_id, adventure.__dict__
+            )
+        except Exception as inst:
+            log.error(
+                "update_adventure",
                 extra={"tags": {"application": NAME}},
                 exc_info=True,
             )
