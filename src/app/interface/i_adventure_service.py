@@ -10,3 +10,7 @@ class IAdventureService(metaclass=abc.ABCMeta):
     @abc.abstractclassmethod
     def get_all_adventures_for_user(self, user_id):
         raise NotImplementedError
+
+    @abc.abstractclassmethod
+    def get_adventure(self, user_id, adventure_id):
+        raise NotImplementedError

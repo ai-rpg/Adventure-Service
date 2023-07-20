@@ -37,6 +37,22 @@ class AdventureRepository(IAdventureRepository):
                 exc_info=True,
             )
 
+    def get_adventure(self, user_id, adventure_id):
+        scope = self.couchbase_repository.cb.scope("_default")
+        sql_query = "select * from adventures where ARRAY_CONTAINS(users, $1) and adventure_id = $2"
+        row_iter = scope.query(
+                sql_query, QueryOptions(positional_parameters=[user_id, adventure_id])
+            )
+        adventures = []
+        for row in row_iter:
+            result: AdventureModel = AdventureModel(
+                row["adventures"]["adventure_id"],
+                row["adventures"]["gamelog"],
+                row["adventures"]["users"],
+            )
+            adventures.append(result)
+        return adventures[0]
+
     def create_new_adventure(self, adventure):
         try:
             self.couchbase_repository.cb_coll.upsert(

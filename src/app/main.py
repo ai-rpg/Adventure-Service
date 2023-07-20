@@ -12,6 +12,7 @@ from metrics import (
     GET_USER_ADVENTURES_CALLED,
     NEW_ADVENTURE_CALLED,
     UPDATE_ADVENTURE_CALLED,
+    GET_ADVENTURE_CALLED,
 )
 from adapter.couchbase_repository import CouchbaseRepository
 from adapter.adventure_repository import AdventureRepository
@@ -77,6 +78,17 @@ class AdventureApp:
                 "update_adventure", extra={"tags": {"application": NAME}}, exc_info=True
             )
 
+    async def get_adventure(self, user_id, adventure_id):
+        try:
+            GET_ADVENTURE_CALLED.inc()
+            return self.adventure_service.get_adventure(user_id, adventure_id)
+        except Exception as inst:
+            log.error(
+                "get_adventure",
+                extra={"tags": {"application": NAME}},
+                exc_info=True,
+            )
+
     def goodbye(self):
         log.info("Application Shutting down", extra={"tags": {"application": NAME}})
 
@@ -107,6 +119,11 @@ def create_new_adventure(user_id: str):
 @app.get("/adventures/{user_id}")
 async def get_all_adventures_for_user(user_id):
     return await adventureApp.get_all_adventures_for_user(user_id)
+
+
+@app.get("/adventure/{user_id}/{adventure_id}")
+async def get_adventure(user_id, adventure_id):
+    return await adventureApp.get_adventure(user_id, adventure_id)
 
 
 @app.post("/update")

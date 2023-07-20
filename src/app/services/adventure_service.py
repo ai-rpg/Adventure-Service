@@ -31,3 +31,6 @@ class AdventureService(IAdventureService):
 
         new_adventure.users = adventure.users
         return self.adventure_repo.update_adventure(new_adventure)
+
+    def get_adventure(self, user_id, adventure_id):
+        return self.adventure_repo.get_adventure(user_id, adventure_id)

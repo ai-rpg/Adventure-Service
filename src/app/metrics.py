@@ -8,3 +8,4 @@ GET_USER_ADVENTURES_CALLED = Counter(
 )
 
 UPDATE_ADVENTURE_CALLED = Counter("update_adventure", "adventure updated")
+GET_ADVENTURE_CALLED = Counter("adventure_reqested", "adventure requested")
